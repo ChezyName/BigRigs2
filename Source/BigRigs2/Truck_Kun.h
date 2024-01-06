@@ -11,15 +11,35 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 {
 	GENERATED_BODY()
 
+	float TANK_ROTATION_SPEED = 1.5;
+
 public:
 	// Sets default values for this character's properties
 	ATruck_Kun();
 
+	float TimeHoldingForward;
+	float TimeHoldingBackward;
+	bool HoldingForward = false;
+	bool HoldingBackward = false;
+
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	float MaxHoldingTime = 5;
+
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	float TruckBaseForwardSpeed = 5000;
+
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	float TruckBaseBackwardSpeed = 4250;
+
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	UCurveFloat* ForwardSpeedCurve;
+
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	UCurveFloat* BackwardSpeedCurve;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	FVector2d MovementInput;
 
 public:	
 	// Called every frame

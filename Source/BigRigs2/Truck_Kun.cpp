@@ -3,12 +3,14 @@
 
 #include "Truck_Kun.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 // Sets default values
 ATruck_Kun::ATruck_Kun()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	bUseControllerRotationYaw = true;
 }
 
 // Called when the game starts or when spawned
@@ -22,7 +24,33 @@ void ATruck_Kun::BeginPlay()
 void ATruck_Kun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//Drive Curves
 
+	//Forward Driving Button Holding
+	if(HoldingForward) TimeHoldingForward += DeltaTime;
+	else TimeHoldingForward -= DeltaTime;
+
+	//Backward Driving Button Holding
+	if(HoldingBackward) TimeHoldingBackward += DeltaTime;
+	else TimeHoldingBackward -= DeltaTime;
+
+	TimeHoldingForward = FMath::Clamp(TimeHoldingForward,0,MaxHoldingTime);
+	TimeHoldingBackward = FMath::Clamp(TimeHoldingBackward,0,MaxHoldingTime);
+
+	//Forward Driving
+	if(TimeHoldingForward > 0 && !HoldingBackward)
+	{
+		float FSpeed = ForwardSpeedCurve->GetFloatValue(TimeHoldingForward);
+		GetCharacterMovement()->MaxWalkSpeed = FSpeed * TruckBaseForwardSpeed;
+		AddMovementInput(GetActorForwardVector(),FSpeed);
+	}
+
+	if(TimeHoldingBackward > 0 && !HoldingForward)
+	{
+		float BSpeed = BackwardSpeedCurve->GetFloatValue(TimeHoldingBackward);
+		GetCharacterMovement()->MaxWalkSpeed = BSpeed * TruckBaseBackwardSpeed;
+		AddMovementInput(GetActorForwardVector(),-BSpeed);
+	}
 }
 
 // Called to bind functionality to input
@@ -37,19 +65,18 @@ void ATruck_Kun::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ATruck_Kun::ForwardInput(float Val)
 {
-	if (Val != 0.0f)
-	{
-		// add movement in that direction
-		AddMovementInput(GetActorForwardVector(), Val);
-	}
+	HoldingForward = Val > 0;
+	HoldingBackward = Val < 0;
 }
 
 void ATruck_Kun::RightInput(float Val)
 {
-	if (Val != 0.0f)
+	if (Val != 0.0f && GetController() && GetVelocity().Length() > 0)
 	{
-		// add movement in that direction
-		AddMovementInput(GetActorRightVector(), Val);
+		FRotator CRotaion = GetControlRotation();
+		float TurnSpeed = HoldingForward ? (TimeHoldingForward/MaxHoldingTime) : (TimeHoldingBackward/MaxHoldingTime);
+		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * TurnSpeed);
+		GetController()->SetControlRotation(CRotaion);
 	}
 }
 
