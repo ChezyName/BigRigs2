@@ -84,7 +84,8 @@ void ATruck_Kun::RightInput(float Val)
 	if (Val != 0.0f && GetController() && GetVelocity().Length() > 0)
 	{
 		FRotator CRotaion = GetControlRotation();
-		float TurnSpeed = HoldingForward ? (TimeHoldingForward/MaxHoldingTime) : (TimeHoldingBackward/MaxHoldingTime);
+		float TurnSpeed = (TimeHoldingForward/MaxHoldingTime) > (TimeHoldingBackward/MaxHoldingTime) ?
+			(TimeHoldingForward/MaxHoldingTime) : (TimeHoldingBackward/MaxHoldingTime);
 		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * TurnSpeed);
 		GetController()->SetControlRotation(CRotaion);
 	}
