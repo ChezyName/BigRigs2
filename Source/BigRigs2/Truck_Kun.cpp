@@ -27,25 +27,35 @@ void ATruck_Kun::Tick(float DeltaTime)
 	//Drive Curves
 
 	//Forward Driving Button Holding
-	if(HoldingForward) TimeHoldingForward += DeltaTime;
-	else TimeHoldingForward -= DeltaTime;
+	if(!(HoldingForward && HoldingBackward))
+	{
+		if(HoldingForward)
+		{
+			TimeHoldingForward += DeltaTime;
+			TimeHoldingBackward -= DeltaTime;
+		}
+		else TimeHoldingForward -= (DeltaTime/2);
 
-	//Backward Driving Button Holding
-	if(HoldingBackward) TimeHoldingBackward += DeltaTime;
-	else TimeHoldingBackward -= DeltaTime;
+		//Backward Driving Button Holding
+		if(HoldingBackward)
+		{
+			TimeHoldingBackward += DeltaTime;
+			TimeHoldingForward -= DeltaTime;
+		}
+		else TimeHoldingBackward -= (DeltaTime/2);
+	}
 
 	TimeHoldingForward = FMath::Clamp(TimeHoldingForward,0,MaxHoldingTime);
 	TimeHoldingBackward = FMath::Clamp(TimeHoldingBackward,0,MaxHoldingTime);
 
 	//Forward Driving
-	if(TimeHoldingForward > 0 && !HoldingBackward)
+	if(TimeHoldingForward > 0)
 	{
 		float FSpeed = ForwardSpeedCurve->GetFloatValue(TimeHoldingForward);
 		GetCharacterMovement()->MaxWalkSpeed = FSpeed * TruckBaseForwardSpeed;
 		AddMovementInput(GetActorForwardVector(),FSpeed);
 	}
-
-	if(TimeHoldingBackward > 0 && !HoldingForward)
+	else if(TimeHoldingBackward > 0)
 	{
 		float BSpeed = BackwardSpeedCurve->GetFloatValue(TimeHoldingBackward);
 		GetCharacterMovement()->MaxWalkSpeed = BSpeed * TruckBaseBackwardSpeed;
