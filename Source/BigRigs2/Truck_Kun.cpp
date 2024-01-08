@@ -63,48 +63,6 @@ void ATruck_Kun::Tick(float DeltaTime)
 		GetCharacterMovement()->MaxWalkSpeed = BSpeed * TruckBaseBackwardSpeed;
 		AddMovementInput(GetActorForwardVector(),-BSpeed);
 	}
-
-	//Align To What Is Under It
-	/*
-	FVector Start = GetActorLocation();
-	FVector End = GetActorLocation() + (GetActorForwardVector() * 25 + -GetActorUpVector() * 50) * 8;
-	End = Start + GetActorUpVector() * -150;
-	DrawDebugLine(GetWorld(),Start,End,FColor::Red,false,-1,0,2);
-
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(this);
-
-	FHitResult HitResult;
-
-	// Perform the raycast
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
-
-	// Debug draw the ray
-	if (bHit)
-	{
-		//Hit Object
-		DrawDebugDirectionalArrow(GetWorld(),HitResult.ImpactPoint,
-			HitResult.ImpactPoint + HitResult.ImpactNormal * 150,
-			5, FColor::Green);
-
-		GetCharacterMovement()->SetGravityDirection(-HitResult.ImpactNormal);
-
-		FVector GroundNormal = HitResult.ImpactNormal;
-		GroundNormal.Normalize();
-
-		FRotator NewRot = FQuat::FindBetweenVectors(FVector::UpVector, GroundNormal).Rotator();
-		SetActorRotation(UKismetMathLibrary::MakeRotFromZX(HitResult.ImpactNormal,GetActorForwardVector()));
-		
-		//if(HitResult.GetActor()) GEngine->AddOnScreenDebugMessage(-1,0,FColor::Green,"HIT: " + HitResult.GetActor()->GetName());
-	}
-	else
-	{
-		FRotator NewRot = GetActorRotation();
-		NewRot.Pitch = 0;
-		//SetActorRotation(NewRot);
-		//GetCharacterMovement()->SetGravityDirection(FVector::DownVector);
-	}
-	*/
 }
 
 // Called to bind functionality to input
