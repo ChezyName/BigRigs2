@@ -11,7 +11,7 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 {
 	GENERATED_BODY()
 
-	float TANK_ROTATION_SPEED = 0.5f;
+	float TANK_ROTATION_SPEED = 0.75f;
 	
 	float TurnRot = 0;
 	float ForwardSpeed = 0;
