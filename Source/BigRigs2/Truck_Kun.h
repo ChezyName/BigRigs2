@@ -60,4 +60,9 @@ public:
 	void endDrift();
 	void CameraYaw(float _yaw);
 	void CameraPitch(float _pitch);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void onStartDrifting();
+	UFUNCTION(BlueprintImplementableEvent)
+	void onEndDrifting();
 };

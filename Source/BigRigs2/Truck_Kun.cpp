@@ -91,6 +91,11 @@ void ATruck_Kun::Tick(float DeltaTime)
 		GetCharacterMovement()->MaxWalkSpeed = BSpeed * TruckBaseBackwardSpeed;
 		AddMovementInput(GetActorForwardVector(),-BSpeed);
 	}
+
+	//VFX
+	//Drifting VFX
+	if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45)) onStartDrifting();
+	else onEndDrifting();
 }
 
 // Called to bind functionality to input
@@ -125,8 +130,8 @@ void ATruck_Kun::RightInput(float Val)
 		float TurnSpeed = (TimeHoldingForward/MaxHoldingTime) > (TimeHoldingBackward/MaxHoldingTime) ?
 			(TimeHoldingForward/MaxHoldingTime) : (TimeHoldingBackward/MaxHoldingTime);
 		
-		if(Drifting) TurnSpeed *= 1.5;
-		if(ForwardSpeed == 0) TurnSpeed *= 1.5;
+		if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45)) TurnSpeed *= 2;
+		if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45) && ForwardSpeed == 0) TurnSpeed *= 1.5;
 		
 		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * TurnSpeed);
 		SetActorRotation(CRotaion);
@@ -136,11 +141,13 @@ void ATruck_Kun::RightInput(float Val)
 void ATruck_Kun::startDrift()
 {
 	Drifting = true;
+	//onStartDrifting();
 }
 
 void ATruck_Kun::endDrift()
 {
 	Drifting = false;
+	//onEndDrifting();
 }
 
 void ATruck_Kun::CameraYaw(float _yaw)
