@@ -65,6 +65,7 @@ void ATruck_Kun::Tick(float DeltaTime)
 	}
 
 	//Align To What Is Under It
+	/*
 	FVector Start = GetActorLocation();
 	FVector End = GetActorLocation() + (GetActorForwardVector() * 25 + -GetActorUpVector() * 50) * 8;
 	End = Start + GetActorUpVector() * -150;
@@ -103,6 +104,7 @@ void ATruck_Kun::Tick(float DeltaTime)
 		//SetActorRotation(NewRot);
 		//GetCharacterMovement()->SetGravityDirection(FVector::DownVector);
 	}
+	*/
 }
 
 // Called to bind functionality to input
