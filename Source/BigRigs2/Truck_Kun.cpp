@@ -48,6 +48,11 @@ void ATruck_Kun::Tick(float DeltaTime)
 		else TimeHoldingBackward -= (DeltaTime/2);
 	}
 
+	if(Drifting && ForwardSpeed == 0)
+	{
+		TimeHoldingBackward -= DeltaTime * 1.5;
+		TimeHoldingForward -= DeltaTime * 1.5;
+	}
 	if(Drifting)
 	{
 		TimeHoldingBackward -= DeltaTime * 0.45;
@@ -62,7 +67,23 @@ void ATruck_Kun::Tick(float DeltaTime)
 	{
 		float FSpeed = ForwardSpeedCurve->GetFloatValue(TimeHoldingForward);
 		GetCharacterMovement()->MaxWalkSpeed = FSpeed * TruckBaseForwardSpeed;
-		AddMovementInput(GetActorForwardVector(),FSpeed);
+		if(Drifting)
+		{
+			if(TurnRot > 0)
+			{
+				//Turning Right
+				AddMovementInput(GetActorForwardVector() + (GetActorRightVector()*0.15),FSpeed);
+			}
+			else if(TurnRot < 0)
+			{
+				//Turning Left
+				AddMovementInput(GetActorForwardVector() + -(GetActorRightVector()*0.15),FSpeed);
+			}
+		}
+		else
+		{
+			AddMovementInput(GetActorForwardVector(),FSpeed);
+		}
 	}
 	else if(TimeHoldingBackward > 0)
 	{
@@ -90,18 +111,23 @@ void ATruck_Kun::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ATruck_Kun::ForwardInput(float Val)
 {
+	ForwardSpeed = Val;
 	HoldingForward = Val > 0;
 	HoldingBackward = Val < 0;
 }
 
 void ATruck_Kun::RightInput(float Val)
 {
+	TurnRot = Val;
 	if (Val != 0.0f && GetController() && GetVelocity().Length() > 0)
 	{
 		FRotator CRotaion = GetActorRotation();
 		float TurnSpeed = (TimeHoldingForward/MaxHoldingTime) > (TimeHoldingBackward/MaxHoldingTime) ?
 			(TimeHoldingForward/MaxHoldingTime) : (TimeHoldingBackward/MaxHoldingTime);
-		if(Drifting) TurnSpeed *= 2;
+		
+		if(Drifting) TurnSpeed *= 1.5;
+		if(ForwardSpeed == 0) TurnSpeed *= 1.5;
+		
 		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * TurnSpeed);
 		SetActorRotation(CRotaion);
 	}

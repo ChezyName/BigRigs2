@@ -12,6 +12,9 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 	GENERATED_BODY()
 
 	float TANK_ROTATION_SPEED = 0.5f;
+	
+	float TurnRot = 0;
+	float ForwardSpeed = 0;
 
 public:
 	// Sets default values for this character's properties
