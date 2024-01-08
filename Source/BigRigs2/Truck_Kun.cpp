@@ -26,10 +26,11 @@ void ATruck_Kun::BeginPlay()
 void ATruck_Kun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//Drive Curves
-
+	//DEBUG
+	//GEngine->AddOnScreenDebugMessage(-1,0,Drifting ? FColor::Green : FColor::Red,"Drifting?");
+	
 	//Forward Driving Button Holding
-	if(!(HoldingForward && HoldingBackward))
+	if(!(HoldingForward && HoldingBackward) && !Drifting)
 	{
 		if(HoldingForward)
 		{
@@ -45,6 +46,12 @@ void ATruck_Kun::Tick(float DeltaTime)
 			TimeHoldingForward -= DeltaTime;
 		}
 		else TimeHoldingBackward -= (DeltaTime/2);
+	}
+
+	if(Drifting)
+	{
+		TimeHoldingBackward -= DeltaTime * 0.45;
+		TimeHoldingForward -= DeltaTime * 0.45;
 	}
 
 	TimeHoldingForward = FMath::Clamp(TimeHoldingForward,0,MaxHoldingTime);
@@ -73,6 +80,12 @@ void ATruck_Kun::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	
 	PlayerInputComponent->BindAxis("MoveForward",this,&ATruck_Kun::ForwardInput);
 	PlayerInputComponent->BindAxis("MoveRight",this,&ATruck_Kun::RightInput);
+
+	PlayerInputComponent->BindAction("Handbrake",IE_Pressed,this,&ATruck_Kun::startDrift);
+	PlayerInputComponent->BindAction("Handbrake",IE_Released,this,&ATruck_Kun::endDrift);
+
+	PlayerInputComponent->BindAxis("LookRight", this, &ATruck_Kun::CameraYaw);
+	PlayerInputComponent->BindAxis("LookUp", this, &ATruck_Kun::CameraPitch);
 }
 
 void ATruck_Kun::ForwardInput(float Val)
@@ -85,11 +98,31 @@ void ATruck_Kun::RightInput(float Val)
 {
 	if (Val != 0.0f && GetController() && GetVelocity().Length() > 0)
 	{
-		FRotator CRotaion = GetControlRotation();
+		FRotator CRotaion = GetActorRotation();
 		float TurnSpeed = (TimeHoldingForward/MaxHoldingTime) > (TimeHoldingBackward/MaxHoldingTime) ?
 			(TimeHoldingForward/MaxHoldingTime) : (TimeHoldingBackward/MaxHoldingTime);
+		if(Drifting) TurnSpeed *= 2;
 		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * TurnSpeed);
-		GetController()->SetControlRotation(CRotaion);
+		SetActorRotation(CRotaion);
 	}
 }
 
+void ATruck_Kun::startDrift()
+{
+	Drifting = true;
+}
+
+void ATruck_Kun::endDrift()
+{
+	Drifting = false;
+}
+
+void ATruck_Kun::CameraYaw(float _yaw)
+{
+	AddControllerYawInput(_yaw);
+}
+
+void ATruck_Kun::CameraPitch(float _pitch)
+{
+	AddControllerPitchInput(_pitch);
+}

@@ -11,7 +11,7 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 {
 	GENERATED_BODY()
 
-	float TANK_ROTATION_SPEED = 1.5;
+	float TANK_ROTATION_SPEED = 0.5f;
 
 public:
 	// Sets default values for this character's properties
@@ -19,8 +19,10 @@ public:
 
 	float TimeHoldingForward;
 	float TimeHoldingBackward;
+	
 	bool HoldingForward = false;
 	bool HoldingBackward = false;
+	bool Drifting = false;
 
 	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
 	float MaxHoldingTime = 5;
@@ -51,4 +53,8 @@ public:
 	void ForwardInput(float Val);
 	void RightInput(float Val);
 
+	void startDrift();
+	void endDrift();
+	void CameraYaw(float _yaw);
+	void CameraPitch(float _pitch);
 };
