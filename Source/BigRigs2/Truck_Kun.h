@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "Truck_Kun.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+
 UCLASS()
 class BIGRIGS2_API ATruck_Kun : public ACharacter
 {
@@ -45,6 +48,14 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	/** Front Camera component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FrontCamera;
+
+	/** Back Camera component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* BackCamera;
 	
 public:	
 	// Called every frame
@@ -60,6 +71,9 @@ public:
 	void endDrift();
 	void CameraYaw(float _yaw);
 	void CameraPitch(float _pitch);
+
+	void ToggleCamera();
+	bool bFrontCameraActive = false;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void onStartDrifting();
