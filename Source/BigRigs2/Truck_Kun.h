@@ -28,22 +28,31 @@ public:
 	
 	bool HoldingForward = false;
 	bool HoldingBackward = false;
+	float TurningValue = 0;
 	bool Drifting = false;
 
-	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	float TimeTurning = 0;
+
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Forward/Backward")
 	float MaxHoldingTime = 5;
 
-	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Forward/Backward")
 	float TruckBaseForwardSpeed = 5000;
 
-	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Forward/Backward")
 	float TruckBaseBackwardSpeed = 4250;
 
-	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Forward/Backward")
 	UCurveFloat* ForwardSpeedCurve;
 
-	UPROPERTY(EditAnywhere,Category="Vehicle Driving")
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Forward/Backward")
 	UCurveFloat* BackwardSpeedCurve;
+
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Turning")
+	float MaxTurnHoldingTime = 5;
+
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Turning")
+	UCurveFloat* TurnCurve;
 
 protected:
 	// Called when the game starts or when spawned

@@ -101,6 +101,27 @@ void ATruck_Kun::Tick(float DeltaTime)
 		AddMovementInput(GetActorForwardVector(),-BSpeed);
 	}
 
+	//Character Turning
+	if (TurningValue != 0.0f) TimeTurning += TurningValue * DeltaTime;
+	else
+	{
+		//Reset To Zero
+		if(TimeTurning > 0) TimeTurning -= DeltaTime;
+		else if(TimeTurning < 0) TimeTurning += DeltaTime;
+	}
+
+	TimeTurning = FMath::Clamp(TurningValue,-MaxTurnHoldingTime,MaxTurnHoldingTime);
+
+	//Acually Turning
+	FRotator CRotaion = GetActorRotation();
+	float TurnSpeed = TurnCurve->GetFloatValue(TimeTurning);
+
+	if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45) && ForwardSpeed == 0) TurnSpeed *= 3;
+	else if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45)) TurnSpeed *= 2;
+		
+	CRotaion.Yaw += (TANK_ROTATION_SPEED * TurnSpeed);
+	SetActorRotation(CRotaion);
+
 	//VFX
 	//Drifting VFX
 	if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45)) onStartDrifting();
@@ -143,22 +164,7 @@ void ATruck_Kun::ForwardInput(float Val)
 
 void ATruck_Kun::RightInput(float Val)
 {
-	TurnRot = Val;
-	if (Val != 0.0f && GetController() && GetVelocity().Length() > 0)
-	{
-		FRotator CRotaion = GetActorRotation();
-		float TurnSpeed = (TimeHoldingForward/MaxHoldingTime) > (TimeHoldingBackward/MaxHoldingTime) ?
-			(TimeHoldingForward/MaxHoldingTime) : (TimeHoldingBackward/MaxHoldingTime);
-
-		//Turn Negative
-		TurnSpeed = FMath::Clamp(TurnSpeed,0.3,1);
-
-		if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45) && ForwardSpeed == 0) TurnSpeed *= 3;
-		else if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45)) TurnSpeed *= 2;
-		
-		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * TurnSpeed);
-		SetActorRotation(CRotaion);
-	}
+	TurningValue = Val;
 }
 
 void ATruck_Kun::startDrift()
