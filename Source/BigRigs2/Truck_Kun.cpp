@@ -153,10 +153,10 @@ void ATruck_Kun::RightInput(float Val)
 		//Turn Negative
 		TurnSpeed = FMath::Clamp(TurnSpeed,0.3,1);
 
-		if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45) && ForwardSpeed == 0) TurnSpeed *= 3;
+		if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45) && ForwardSpeed == 0) TurnSpeed *= 5;
 		else if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45)) TurnSpeed *= 2;
 		
-		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * TurnSpeed);
+		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * (TurnSpeed));
 		SetActorRotation(CRotaion);
 	}
 	TurningValue = Val;
