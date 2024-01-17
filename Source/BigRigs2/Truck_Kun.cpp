@@ -31,6 +31,16 @@ void ATruck_Kun::BeginPlay()
 	
 }
 
+void ATruck_Kun::ReOrientCamera()
+{
+	CameraReOrienting = true;
+}
+
+void ATruck_Kun::UnReOrientCamera()
+{
+	CameraReOrienting = false;
+}
+
 // Called every frame
 void ATruck_Kun::Tick(float DeltaTime)
 {
@@ -107,13 +117,20 @@ void ATruck_Kun::Tick(float DeltaTime)
 	else onEndDrifting();
 
 	//Camera Realignment
-	float CameraYaw = FrontCamera->GetRelativeRotation().Yaw;
-	CameraYaw = FMath::FInterpTo(CameraYaw, 0.0f, DeltaTime, 1.0f);
+	if(CameraReOrienting)
+	{
+		float CameraYaw = FrontCamera->GetRelativeRotation().Yaw;
+		CameraYaw = FMath::FInterpTo(CameraYaw, 0.0f, DeltaTime, 1.0f);
 
-	float CameraPitch = FrontCamera->GetRelativeRotation().Pitch;
-	CameraPitch = FMath::FInterpTo(CameraPitch, 0.0f, DeltaTime, 1.0f);
+		float CameraPitch = FrontCamera->GetRelativeRotation().Pitch;
+		CameraPitch = FMath::FInterpTo(CameraPitch, 0.0f, DeltaTime, 1.0f);
 	
-	FrontCamera->SetRelativeRotation(FRotator(CameraPitch, CameraYaw, 0.0f));
+		FrontCamera->SetRelativeRotation(FRotator(CameraPitch, CameraYaw, 0.0f));
+	}
+
+	FrontCamera->SetRelativeRotation(FRotator(
+		FrontCamera->GetRelativeRotation().Pitch,
+		FrontCamera->GetRelativeRotation().Yaw, 0));
 }
 
 // Called to bind functionality to input
@@ -127,6 +144,9 @@ void ATruck_Kun::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 	PlayerInputComponent->BindAction("Handbrake",IE_Pressed,this,&ATruck_Kun::startDrift);
 	PlayerInputComponent->BindAction("Handbrake",IE_Released,this,&ATruck_Kun::endDrift);
+
+	PlayerInputComponent->BindAction("ReOrientCamera",IE_Pressed,this,&ATruck_Kun::ReOrientCamera);
+	PlayerInputComponent->BindAction("ReOrientCamera",IE_Released,this,&ATruck_Kun::UnReOrientCamera);
 
 	PlayerInputComponent->BindAction("ChangeCamera",IE_Released,this,&ATruck_Kun::ToggleCamera);
 
@@ -177,13 +197,13 @@ void ATruck_Kun::endDrift()
 void ATruck_Kun::CameraYaw(float _yaw)
 {
 	AddControllerYawInput(_yaw);
-	FrontCamera->AddLocalRotation(FRotator(0.0f, _yaw, 0.0f));
+	if(FrontCamera->IsActive()) FrontCamera->AddLocalRotation(FRotator(0.0f, _yaw, 0.0f));
 }
 
 void ATruck_Kun::CameraPitch(float _pitch)
 {
 	AddControllerPitchInput(-_pitch);
-	FrontCamera->AddLocalRotation(FRotator(_pitch, 0.0f, 0.0f));
+	if(FrontCamera->IsActive()) FrontCamera->AddLocalRotation(FRotator(_pitch, 0.0f, 0.0f));
 }
 
 void ATruck_Kun::ToggleCamera()

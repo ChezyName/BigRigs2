@@ -31,6 +31,8 @@ public:
 	float TurningValue = 0;
 	bool Drifting = false;
 
+	bool CameraReOrienting = false;
+
 	float TimeTurning = 0;
 
 	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Forward/Backward")
@@ -65,6 +67,9 @@ protected:
 	/** Back Camera component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* BackCamera;
+
+	void ReOrientCamera();
+	void UnReOrientCamera();
 	
 public:	
 	// Called every frame
