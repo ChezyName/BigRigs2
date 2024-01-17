@@ -175,6 +175,8 @@ void ATruck_Kun::RightInput(float Val)
 
 		if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45) && ForwardSpeed == 0) TurnSpeed *= 5;
 		else if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45)) TurnSpeed *= 2;
+
+if(TimeHoldingForward < TimeHoldingBackward) TurnSpeed *= 1;
 		
 		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * (TurnSpeed));
 		SetActorRotation(CRotaion);
