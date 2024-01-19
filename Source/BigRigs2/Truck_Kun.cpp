@@ -16,6 +16,14 @@ ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
 	bUseControllerRotationYaw = true;
 
 	//Ninja Component Thanks To Javier Osset (Xaklse)
+	UNinjaCharacterMovementComponent* CharMovement = Cast<UNinjaCharacterMovementComponent>(GetCharacterMovement());
+	if(CharMovement)
+	{
+		CharMovement->bLandOnAnySurface = true;
+		CharMovement->bAlignComponentToFloor = true;
+		CharMovement->bAlignComponentToGravity = true;
+		CharMovement->bAlwaysRotateAroundCenter = true;
+	}
 	
 	//Camera Fixing
 	FrontCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Front Camera"));
