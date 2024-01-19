@@ -219,6 +219,11 @@ void ATruck_Kun::CameraPitch(float _pitch)
 {
 	AddControllerPitchInput(-_pitch);
 	if(FrontCamera->IsActive()) FrontCamera->AddLocalRotation(FRotator(_pitch, 0.0f, 0.0f));
+
+	//Clamp Rotation
+	float P = FrontCamera->GetRelativeRotation().Pitch;
+	P = FMath::ClampAngle(P,-80,80);
+	FrontCamera->SetRelativeRotation(FRotator(P, FrontCamera->GetRelativeRotation().Yaw, 0.f));
 }
 
 void ATruck_Kun::ToggleCamera()
