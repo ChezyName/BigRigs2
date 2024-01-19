@@ -1,0 +1,109 @@
+
+2.18.03:
+- Added unused helper functions that handle Axis2D inputs.
+- Added helper keywords to SetCharMovementAxis.
+- Classes updated to Unreal Engine 5.3.
+
+2.15.02:
+- Classes updated to Unreal Engine 5.2.
+- Added more helpful comments to smooth component interpolation Blueprint nodes.
+- Fixed first location change in smooth component interpolation Blueprint nodes.
+
+2.12.01:
+- Fixed NewDelta calculation that always had negative Z value in ComputeGroundMovementDeltaEx function.
+- Added a new Character Blueprint example that doesn't "Orient Rotation to Movement".
+	It uses HeroTPP assets, the Animation Blueprint was modified to calculate a correct Direction.
+
+2.10.01:
+- Classes updated to Unreal Engine 5.1.
+	Removed the new FCharacterMoveResponseDataContainer because it's no longer needed.
+
+2.10.00:
+- Made sure some code is executed even if inherited CVars don't exist.
+- Converted raw pointer properties to ObjectPtr.
+- Changed the way the final GravityScale is calculated in NinjaCharacter and NinjaPhysicsVolume.
+- Added GetUnscaledGravityZ function to NinjaCharacterMovementComponent.
+- Added GetFinalGravityScale function to NinjaPhysicsVolume.
+	Changed all other gets so that they receive a scene object instead of a vector point.
+- Fixed RequestPathMove that called parent function instead of grandparent function.
+- Added configurable IgnoreOtherGravityScales checkbox to NinjaCharacterMovementComponent.
+- Added new scope cycle counters for performance measurement.
+
+2.01.00:
+- Classes updated to Unreal Engine 5.0.
+- Fixed Console Variables that were inherited from CharacterMovementComponent class.
+
+1.39.27:
+- Improved UpdateComponentRotation to better handle penetrations with perpendicular axis changes.
+- Added GetAxisX/GetAxisY functions of an FRotator in NinjaMath.
+- Added configurable AltFlipControlRotation checkbox to NinjaCharacter.
+	ControlRotation of Controller performs 180 degrees flips by preserving another axis.
+
+1.36.27:
+- Normalized vertical axis to avoid assert/crash with "Change Char Axis" Blueprint node.
+- Disabled NetworkSmoothingMode of CharacterMovement by default.
+	Linear and exponential modes have important issues if the collision capsule isn't straight.
+- Added new FCharacterMoveResponseDataContainer to send the rotation of the collision capsule.
+- Fixed network sync of vertical axis of the collision capsule.
+	Network clients receive adjustments, movement modes shouldn't desync anymore.
+- Converted LandOnAnySurface checkbox to pure boolean type to use it with TGuardValue.
+- Added configurable ForceSimulateMovement checkbox to NinjaCharacterMovementComponent.
+	Non-owning network clients skip simulating movement if base isn't replicated.
+	Modular corridor and stands of example map aren't replicated properly (engine limitation?).
+
+1.29.27:
+- Classes updated to Unreal Engine 4.27.
+
+1.29.26:
+- Added Epic's missing code changes that were written between UE 4.22 and 4.23 releases.
+- Amended incorrect notes of SmoothComponent Blueprint functions.
+- Return UpVector constant in GetComponentDesiredAxisZ instead of in GetComponentAxisZ.
+- Added SetCharMovementAxis Blueprint callable function to NinjaCharacter.
+	"Change Char Axis" node allows rotating the collision capsule and force-walk unwalkable surfaces.
+	"On Unwalkable Hit" event is triggered when the collision capsule bumps into an unwalkable blocking object.
+	"Trigger Unwalkable Hits" checkbox controls unwalkable hit events.
+- Used a quaternion to rotate the ControlRotation in OnCharMovementAxisChanged.
+- Added GetAxisZ function of an FRotator in NinjaMath.
+- Replaced uses of 0,0,-1 vector with DownVector constant.
+- Used HALF_PI constant instead of PI/2.
+- Deleted unneeded trigger of 1.3 example because OnMovementModeChanged's code was changed to rotate around center of collision capsule.
+
+1.20.26:
+- Allowed simulated NinjaCharacters to find any floor while falling if LandOnAnySurface is marked.
+- Remade MakeFromZQuat function: now it flips control rotation when capsule rotates 180 degrees (if applicable).
+	Harsh 90 degrees rotation of NinjaCharacter is also improved.
+- Replaced use of SCENECOMPONENT_ROTATOR_TOLERANCE number with the configuration value called ThresholdParallelAngle.
+- NinjaCharacter logs error and doesn't smooth Mesh if NetworkSmoothingMode of CharacterMovement is enabled.
+	Allows smooth interpolation of attached skeletal mesh component in remotely controlled NinjaCharacters.
+- Added NinjaFallVelocity to NinjaPhysicsVolume that imparts a falling velocity to entering walking NinjaCharacters.
+
+1.15.26:
+- Re-release to fix outdated .uplugin file.
+
+1.14.26:
+- Cleanup of unneeded SupportedPrograms section in .uplugin file.
+- Fixed ComputeGroundMovementDeltaEx function to allow no delta movement offset to avoid assert/crash.
+- Improved crouch offset support for attached skeletal mesh component in NinjaCharacter.
+	Mesh crouch offset works properly if using absolute world position (happens with smooth interpolation).
+- Disallowed smooth interpolation of attached skeletal mesh component in remotely controlled NinjaCharacters.
+- Added SmoothComponentLocation/SmoothComponentRotation Blueprint callable functions to NinjaCharacter.
+- Simplified Blueprint graph of NinjaDumbCharacter05_BP example.
+	No need to cache initial relative location and rotation for the attached skeletal mesh component.
+
+1.08.26:
+- Classes updated to Unreal Engine 4.26.
+
+1.08.25:
+- Added generic code in NinjaMath that determines if two unit vectors are orthogonal/parallel.
+- Added configurable ThresholdParallelAngle float to NinjaCharacterMovementComponent.
+	Reducing this value improves perceived smoothness of certain rotation calculations, allowing more collision capsule rotations on moving bases.
+- Added Help folder with 'Changelog' and 'How to use' text files.
+- Transformed wrong Client RPCs into NetMulticast RPCs in NinjaCharacterMovementComponent.
+- Added SmoothComponentLocationAndRotation Blueprint callable function to NinjaCharacter.
+	Smoothly interpolates location and rotation of an attached component; check 1.5 section in example map.
+
+1.03.25:
+- Fixed missing UPROPERTY categories to fix broken game packaging for some configurations.
+
+1.01.25:
+- Initial release.

@@ -21,7 +21,7 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	ATruck_Kun();
+	ATruck_Kun(const FObjectInitializer& ObjectInitializer);
 
 	float TimeHoldingForward;
 	float TimeHoldingBackward;

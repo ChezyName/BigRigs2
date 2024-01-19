@@ -2,26 +2,31 @@
 
 
 #include "Truck_Kun.h"
-
+#include "NinjaCharacter/Public/NinjaCharacterMovementComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
 // Sets default values
-ATruck_Kun::ATruck_Kun()
+ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UNinjaCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bUseControllerRotationYaw = true;
-	GetCharacterMovement()->DefaultLandMovementMode = MOVE_Flying;
 
+	//Ninja Component Thanks To Javier Osset (Xaklse)
+	
+	//Camera Fixing
 	FrontCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Front Camera"));
 	FrontCamera->SetupAttachment(GetMesh());
 	FrontCamera->bAutoActivate = false;
 
 	BackCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Back Camera"));
 	BackCamera->SetupAttachment(GetMesh());
+
+	FrontCamera->bUsePawnControlRotation = false;
+	BackCamera->bUsePawnControlRotation = false;
 }
 
 // Called when the game starts or when spawned

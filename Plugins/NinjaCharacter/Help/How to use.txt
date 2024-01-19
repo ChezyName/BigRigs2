@@ -1,0 +1,99 @@
+
+- Make sure you already have created a game project.
+- Player controls are only handled by the example Character Blueprint, and require input bindings.
+- Open the example level to learn how to use the new classes added by the plugin.
+
+0. Install the plugin to the engine.
+	a. Open Epic Games launcher
+	b. Click on "Unreal Engine" section
+	c. Click on "Library" tab
+	d. Under "Vault" sub-section, search for "Ninja Character Plugin"
+	e. Click "Install to Engine"
+	f. Choose engine version and wait for installation
+
+1. Enable the plugin in your game project.
+	a. Open project with editor
+	b. Edit > Plugins
+	c. Search for "Ninja Character"
+	d. Mark "Enabled" checkbox
+	e. Restart editor
+
+2. In Content Browser, mark "Show Engine Content" and "Show Plugin Content" checkboxes in "View Options"
+
+3. Add new input bindings (optional).
+	a. Outside the editor, go to your project's root folder
+	b. Open "Config" folder
+	c. Backup "DefaultInput.ini" file (if it exists)
+	d. In the editor, Edit > Project Settings
+	e. Click on "Input" section below big "Engine" word
+	f. Under "Bindings" sub-section:
+		- Add "Jump" to "Action Mappings", assign a key/button
+		- Add "MoveForward" to "Axis Mappings", assign keys or joystick axis
+		- Add "MoveRight" to "Axis Mappings", assign keys or joystick axis
+		- Add "Turn" to "Axis Mappings", assign mouse axis
+		- Add "LookUp" to "Axis Mappings", assign mouse axis
+		- Add "TurnRate" to "Axis Mappings", assign joystick axis
+		- Add "LookUpRate" to "Axis Mappings", assign joystick axis
+
+4. Open the example level (optional).
+	a. In Content Browser, choose the "NinjaCharacter Content" path/folder
+	b. NinjaCharacter > Maps
+	c. Double click on "NinjaCharacterExampleMap"
+	d. Play the level (input bindings required), or simulate the level (ALT+S)
+
+5. Open any level of your game project.
+
+6. If you DON'T have your own Character Blueprint:
+	a. In Content Browser, choose the "NinjaCharacter Content" path/folder
+	b. NinjaCharacter > Blueprints
+	c. Right click on "NinjaPlayerCharacter_BP"
+	d. Asset Actions > Migrate...
+	e. Click on "OK" button
+	f. Choose your project's Content folder
+
+7. If you have your own Character Blueprint:
+	a. In Content Browser, search your own Character Blueprint
+	b. Open it
+	c. File > Reparent Blueprint
+	d. Choose "NinjaCharacter"
+	e. In Content Browser, choose the "NinjaCharacter Content" path/folder
+	f. NinjaCharacter > Blueprints
+	g. Double click on "NinjaPlayerCharacter_BP"
+	h. Click on "Event Graph" tab
+	i. Copy nodes and connections you need (for player input) to your own Character Blueprint
+	j. In "Components" panel, select "NinjaPlayerCharacter_BP(self)"
+	k. Copy the changed settings you need to your own Character Blueprint
+	l. In "Components" panel, select "CharacterMovement (Inherited)"
+	m. Copy the changed settings you need to your own Character Blueprint
+
+8. If you DON'T have your own PlayerController Blueprint:
+	a. In Content Browser, click on "Add New" button
+	b. Select "Blueprint Class"
+	c. Click on "Player Controller" button
+	d. Name it, open it
+	e. Change the "Player Camera Manager Class" setting to "NinjaPlayerCameraManager"
+
+9. If you have your own PlayerController Blueprint:
+	a. In Content Browser, search your own PlayerController Blueprint
+	b. Open it
+	c. Change the "Player Camera Manager Class" setting to "NinjaPlayerCameraManager"
+
+10. If you DON'T have your own GameModeBase Blueprint:
+	a. In Content Browser, click on "Add New" button
+	b. Select "Blueprint Class"
+	c. Click on "Game Mode Base" button
+	d. Name it, open it
+	e. Change the "Player Controller Class" setting to the PlayerController Blueprint
+	f. Change the "Default Pawn Class" setting to the Character Blueprint
+
+11. If you have your own GameModeBase Blueprint:
+	a. In Content Browser, search your own GameModeBase Blueprint
+	b. Open it
+	c. Verify the "Player Controller Class" setting uses your own PlayerController Blueprint
+	d. Verify the "Default Pawn Class" setting uses your own Character Blueprint
+
+12. In your level, Window > World Settings
+
+13. In "World Settings" panel, change the "GameMode Override" setting to your own GameModeBase Blueprint
+
+14. Play your level
