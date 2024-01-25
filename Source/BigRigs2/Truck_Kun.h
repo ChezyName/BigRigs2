@@ -19,7 +19,11 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 	float TurnRot = 0;
 	float ForwardSpeed = 0;
 
+	int CheckpointNumber = 0;
+
 public:
+	int getCheckpoint(){ return CheckpointNumber; }
+	
 	// Sets default values for this character's properties
 	ATruck_Kun(const FObjectInitializer& ObjectInitializer);
 
@@ -70,7 +74,9 @@ protected:
 
 	void ReOrientCamera();
 	void UnReOrientCamera();
-	
+
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

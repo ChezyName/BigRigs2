@@ -1,11 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+
 #include "Truck_Kun.h"
+
+#include "Checkpoint.h"
 #include "NinjaCharacter/Public/NinjaCharacterMovementComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
@@ -35,6 +38,8 @@ ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
 
 	FrontCamera->bUsePawnControlRotation = false;
 	BackCamera->bUsePawnControlRotation = false;
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ATruck_Kun::OnOverlapBegin);
 }
 
 // Called when the game starts or when spawned
@@ -233,4 +238,39 @@ void ATruck_Kun::ToggleCamera()
 
 	FrontCamera->SetActive(bFrontCameraActive);
 	BackCamera->SetActive(!bFrontCameraActive);
+}
+
+void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	/*
+	//Check Collisions
+	if(ACheckpoint* Checkpoint = Cast<ACheckpoint>(OtherActor))
+	{
+		if(Checkpoint->isEndGoal)
+		{
+			//Final Goal
+			if(Checkpoint->FinalCheckpoint == CheckpointNumber)
+			{
+				//End Map
+			}
+		}
+		else
+		{
+			//Regular Checkpoint
+			if(Checkpoint->CheckpointNumber > CheckpointNumber)
+			{
+				CheckpointNumber = Checkpoint->CheckpointNumber;
+				
+				TArray<AActor*> Checkpoints;
+				UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACheckpoint::StaticClass(), Checkpoints);
+				for(AActor* CheckpointActor : Checkpoints)
+				{
+					ACheckpoint* CP = Cast<ACheckpoint>(CheckpointActor);
+					if(CP) CP->onCheckpoint(CheckpointNumber + 1);
+				}
+			}
+		}
+	}
+	*/
 }

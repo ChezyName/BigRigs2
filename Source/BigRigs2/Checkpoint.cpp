@@ -2,6 +2,7 @@
 
 
 #include "Checkpoint.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACheckpoint::ACheckpoint()
@@ -13,9 +14,14 @@ ACheckpoint::ACheckpoint()
 	RootComponent = GoalRing;
 }
 
-// Called when the game starts or when spawned
+void ACheckpoint::onCheckpoint(int nextCheckpoint)
+{
+	if(ThisCheckpointNumber)
+}
+
 void ACheckpoint::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	onCheckpoint(0);
 }
+
