@@ -29,10 +29,10 @@ public:
 	UStaticMeshComponent* GoalRing;
 
 	UPROPERTY(EditDefaultsOnly,meta=(AllowPrivateAccess),Category="Goal Materials")
-	UMaterial* NonHighlightedMat;
+	UMaterialInterface* NonHighlightedMat;
 
 	UPROPERTY(EditDefaultsOnly,meta=(AllowPrivateAccess),Category="Goal Materials")
-	UMaterial* NextGoalMat;
+	UMaterialInterface* NextGoalMat;
 
 	void onCheckpoint(int nextCheckpoint);
 
