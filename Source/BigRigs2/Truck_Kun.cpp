@@ -3,10 +3,10 @@
 
 
 #include "Truck_Kun.h"
-
 #include "Checkpoint.h"
 #include "NinjaCharacter/Public/NinjaCharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -243,7 +243,6 @@ void ATruck_Kun::ToggleCamera()
 void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	/*
 	//Check Collisions
 	if(ACheckpoint* Checkpoint = Cast<ACheckpoint>(OtherActor))
 	{
@@ -258,9 +257,9 @@ void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 		else
 		{
 			//Regular Checkpoint
-			if(Checkpoint->CheckpointNumber > CheckpointNumber)
+			if(Checkpoint->ThisCheckpointNumber > CheckpointNumber)
 			{
-				CheckpointNumber = Checkpoint->CheckpointNumber;
+				CheckpointNumber = Checkpoint->ThisCheckpointNumber;
 				
 				TArray<AActor*> Checkpoints;
 				UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACheckpoint::StaticClass(), Checkpoints);
@@ -272,5 +271,4 @@ void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 			}
 		}
 	}
-	*/
 }

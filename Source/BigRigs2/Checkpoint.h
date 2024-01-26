@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	ACheckpoint();
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Checkpoint")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Checkpoint",meta=(EditCondition="isEndGoal==false",EditConditionHides))
 	int ThisCheckpointNumber = 1;
 
 	

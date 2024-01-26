@@ -22,6 +22,7 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 	int CheckpointNumber = 0;
 
 public:
+	UFUNCTION(BlueprintCallable)
 	int getCheckpoint(){ return CheckpointNumber; }
 	
 	// Sets default values for this character's properties

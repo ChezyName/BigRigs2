@@ -11,12 +11,29 @@ ACheckpoint::ACheckpoint()
 	PrimaryActorTick.bCanEverTick = false;
 
 	GoalRing = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Goal Ring"));
+	GoalRing->SetCollisionProfileName("OverlapAll");
 	RootComponent = GoalRing;
 }
 
 void ACheckpoint::onCheckpoint(int nextCheckpoint)
 {
-	if(ThisCheckpointNumber)
+	if(ThisCheckpointNumber == nextCheckpoint)
+	{
+		//This is our Next Checkpoint - GLOW
+		if(NextGoalMat) GoalRing->SetMaterial(0,NextGoalMat);
+		GoalRing->SetVisibility(true);
+	}
+	else if(ThisCheckpointNumber == (nextCheckpoint+1))
+	{
+		//This is our Next-Next Checkpoint - SEMI Glow
+		if(NonHighlightedMat) GoalRing->SetMaterial(0,NonHighlightedMat);
+		GoalRing->SetVisibility(true);
+	}
+	else
+	{
+		//HIDE
+		GoalRing->SetVisibility(false);
+	}
 }
 
 void ACheckpoint::BeginPlay()
