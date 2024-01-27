@@ -240,8 +240,8 @@ void ATruck_Kun::ToggleCamera()
 	// toggle the active camera flag
 	bFrontCameraActive = !bFrontCameraActive;
 
-	FrontCamera->SetActive(bFrontCameraActive);
-	BackCamera->SetActive(!bFrontCameraActive);
+	FrontCamera->SetActive(false);
+	BackCamera->SetActive(true);
 }
 
 void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
