@@ -149,6 +149,8 @@ void ATruck_Kun::Tick(float DeltaTime)
 	FrontCamera->SetRelativeRotation(FRotator(
 		FrontCamera->GetRelativeRotation().Pitch,
 		FrontCamera->GetRelativeRotation().Yaw, 0));
+
+	BackCamera->SetWorldRotation(FRotator(0,GetActorRotation().Yaw,0));
 }
 
 // Called to bind functionality to input
