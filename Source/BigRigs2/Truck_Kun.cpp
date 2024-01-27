@@ -46,7 +46,7 @@ ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
 void ATruck_Kun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	timeStarted = true;
 }
 
 void ATruck_Kun::ReOrientCamera()
@@ -65,6 +65,8 @@ void ATruck_Kun::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	//DEBUG
 	//GEngine->AddOnScreenDebugMessage(-1,0,Drifting ? FColor::Green : FColor::Red,"Drifting?");
+
+	if(timeStarted) timer += (DeltaTime*1000);
 	
 	//Forward Driving Button Holding
 	if(!(HoldingForward && HoldingBackward) && !Drifting)
@@ -254,6 +256,7 @@ void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 			if(Checkpoint->FinalCheckpoint == CheckpointNumber)
 			{
 				//End Map
+				timeStarted = false;
 			}
 		}
 		else

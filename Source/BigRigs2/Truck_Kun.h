@@ -20,10 +20,24 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 	float ForwardSpeed = 0;
 
 	int CheckpointNumber = 0;
+	
+	float timer = 0;
+	bool timeStarted = false;
 
 public:
 	UFUNCTION(BlueprintCallable)
 	int getCheckpoint(){ return CheckpointNumber; }
+
+	UFUNCTION(BlueprintCallable)
+	FString getTime(){
+		// Calculate minutes, seconds, and milliseconds
+		int32 Minutes = timer / 60000;
+		int32 Seconds = (FMath::RoundToInt(timer) % 60000) / 1000;
+		int32 Millis = (FMath::RoundToInt(timer) % 1000);
+
+		// Format the string
+		return FString::Printf(TEXT("%02d:%02d:%03d"), Minutes, Seconds, Millis);
+	}
 	
 	// Sets default values for this character's properties
 	ATruck_Kun(const FObjectInitializer& ObjectInitializer);
