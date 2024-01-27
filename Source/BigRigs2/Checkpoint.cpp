@@ -17,22 +17,45 @@ ACheckpoint::ACheckpoint()
 
 void ACheckpoint::onCheckpoint(int nextCheckpoint)
 {
-	if(ThisCheckpointNumber == nextCheckpoint)
+	if(isEndGoal)
 	{
-		//This is our Next Checkpoint - GLOW
-		if(NextGoalMat) GoalRing->SetMaterial(0,NextGoalMat);
-		GoalRing->SetVisibility(true);
-	}
-	else if(ThisCheckpointNumber == (nextCheckpoint+1))
-	{
-		//This is our Next-Next Checkpoint - SEMI Glow
-		if(NonHighlightedMat) GoalRing->SetMaterial(0,NonHighlightedMat);
-		GoalRing->SetVisibility(true);
+		if(FinalCheckpoint == nextCheckpoint)
+		{
+			//This is our Next Checkpoint - GLOW
+			if(NextGoalMat) GoalRing->SetMaterial(0,NextGoalMat);
+			GoalRing->SetVisibility(true);
+		}
+		else if(FinalCheckpoint == (nextCheckpoint+1))
+		{
+			//This is our Next-Next Checkpoint - SEMI Glow
+			if(NonHighlightedMat) GoalRing->SetMaterial(0,NonHighlightedMat);
+			GoalRing->SetVisibility(true);
+		}
+		else
+		{
+			//HIDE
+			GoalRing->SetVisibility(false);
+		}
 	}
 	else
 	{
-		//HIDE
-		GoalRing->SetVisibility(false);
+		if(ThisCheckpointNumber == nextCheckpoint)
+		{
+			//This is our Next Checkpoint - GLOW
+			if(NextGoalMat) GoalRing->SetMaterial(0,NextGoalMat);
+			GoalRing->SetVisibility(true);
+		}
+		else if(ThisCheckpointNumber == (nextCheckpoint+1))
+		{
+			//This is our Next-Next Checkpoint - SEMI Glow
+			if(NonHighlightedMat) GoalRing->SetMaterial(0,NonHighlightedMat);
+			GoalRing->SetVisibility(true);
+		}
+		else
+		{
+			//HIDE
+			GoalRing->SetVisibility(false);
+		}
 	}
 }
 

@@ -253,7 +253,7 @@ void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 		if(Checkpoint->isEndGoal)
 		{
 			//Final Goal
-			if(Checkpoint->FinalCheckpoint == CheckpointNumber)
+			if(Checkpoint->FinalCheckpoint == (CheckpointNumber+1))
 			{
 				//End Map
 				timeStarted = false;
@@ -262,7 +262,7 @@ void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 		else
 		{
 			//Regular Checkpoint
-			if(Checkpoint->ThisCheckpointNumber > CheckpointNumber)
+			if(Checkpoint->ThisCheckpointNumber == (CheckpointNumber+1))
 			{
 				CheckpointNumber = Checkpoint->ThisCheckpointNumber;
 				
