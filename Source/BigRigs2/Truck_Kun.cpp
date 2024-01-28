@@ -271,9 +271,31 @@ void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 				for(AActor* CheckpointActor : Checkpoints)
 				{
 					ACheckpoint* CP = Cast<ACheckpoint>(CheckpointActor);
-					if(CP) CP->onCheckpoint(CheckpointNumber + 1);
+					if(CP && IsLocallyControlled()) CP->onCheckpoint(CheckpointNumber + 1);
 				}
 			}
 		}
 	}
+}
+
+AActor* ATruck_Kun::getNextCheckpoint()
+{
+	TArray<AActor*> Checkpoints;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACheckpoint::StaticClass(), Checkpoints);
+	for(AActor* CheckpointActor : Checkpoints)
+	{
+		ACheckpoint* CP = Cast<ACheckpoint>(CheckpointActor);
+		if(IsValid(CP))
+		{
+			if(CP->ThisCheckpointNumber == (CheckpointNumber + 1) ||
+				(CP->isEndGoal && CP->FinalCheckpoint == (CheckpointNumber + 1)))
+			{
+				GEngine->AddOnScreenDebugMessage(-1,0,FColor::Cyan,
+					"CP: " + FString::SanitizeFloat(CheckpointNumber) + " ~ " +
+					CP->GetActorNameOrLabel());
+				return CP;
+			}
+		}
+	}
+	return nullptr;
 }
