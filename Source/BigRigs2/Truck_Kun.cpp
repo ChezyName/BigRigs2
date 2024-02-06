@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
@@ -40,6 +41,10 @@ ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
 	BackCamera->bUsePawnControlRotation = false;
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ATruck_Kun::OnOverlapBegin);
+
+	//Truck Engine
+	EngineSFX = CreateDefaultSubobject<UAudioComponent>(TEXT("EngineSound"));
+	EngineSFX->SetupAttachment(GetCapsuleComponent());
 }
 
 // Called when the game starts or when spawned
@@ -100,6 +105,10 @@ void ATruck_Kun::Tick(float DeltaTime)
 
 	TimeHoldingForward = FMath::Clamp(TimeHoldingForward,0,MaxHoldingTime);
 	TimeHoldingBackward = FMath::Clamp(TimeHoldingBackward,0,MaxHoldingTime);
+
+	//Engine Sounds
+	EngineSFX->SetPitchMultiplier((((TimeHoldingForward/MaxHoldingTime)*1) - ((TimeHoldingBackward/MaxHoldingTime)*0.25)) + 1);
+	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Orange,"Engine Pitch: " + FString::SanitizeFloat(EngineSFX->PitchMultiplier));
 
 	//Forward Driving
 	if(TimeHoldingForward > 0)
