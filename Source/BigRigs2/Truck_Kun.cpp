@@ -45,6 +45,8 @@ ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
 	//Truck Engine
 	EngineSFX = CreateDefaultSubobject<UAudioComponent>(TEXT("EngineSound"));
 	EngineSFX->SetupAttachment(GetCapsuleComponent());
+
+	GetMesh()->SetMassScale(NAME_None,999.f);
 }
 
 // Called when the game starts or when spawned
@@ -209,7 +211,7 @@ void ATruck_Kun::RightInput(float Val)
 
 if(TimeHoldingForward < TimeHoldingBackward) TurnSpeed *= 1;
 		
-		CRotaion.Yaw += Val * (TANK_ROTATION_SPEED * (TurnSpeed));
+		CRotaion.Yaw += Val * (TurnAngleMultiplier * (TurnSpeed));
 		SetActorRotation(CRotaion);
 	}
 	TurningValue = Val;

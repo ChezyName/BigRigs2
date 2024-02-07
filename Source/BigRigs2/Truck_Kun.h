@@ -13,8 +13,6 @@ UCLASS()
 class BIGRIGS2_API ATruck_Kun : public ACharacter
 {
 	GENERATED_BODY()
-
-	float TANK_ROTATION_SPEED = 0.75f;
 	
 	float TurnRot = 0;
 	float ForwardSpeed = 0;
@@ -71,6 +69,9 @@ public:
 
 	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Turning")
 	float MaxTurnHoldingTime = 5;
+	
+	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Turning")
+	float TurnAngleMultiplier = 0.75f;
 
 	UPROPERTY(EditAnywhere,Category="Vehicle Driving|Turning")
 	UCurveFloat* TurnCurve;
