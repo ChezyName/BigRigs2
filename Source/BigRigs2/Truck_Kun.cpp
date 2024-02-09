@@ -4,6 +4,7 @@
 
 #include "Truck_Kun.h"
 #include "Checkpoint.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "NinjaCharacter/Public/NinjaCharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -54,6 +55,9 @@ void ATruck_Kun::BeginPlay()
 {
 	Super::BeginPlay();
 	timeStarted = true;
+
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if(PC) UWidgetBlueprintLibrary::SetInputMode_GameOnly(PC,false);
 }
 
 void ATruck_Kun::ReOrientCamera()

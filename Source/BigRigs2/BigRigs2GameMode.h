@@ -13,6 +13,8 @@ class ABigRigs2GameMode : public AGameModeBase
 
 public:
 	ABigRigs2GameMode();
+
+	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 };
 
 
