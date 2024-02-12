@@ -78,6 +78,7 @@ void ATruck_Kun::ResetActivate()
 
 void ATruck_Kun::DeActivateReset()
 {
+	ResetTime = 0;
 	isReseting = false;
 }
 
