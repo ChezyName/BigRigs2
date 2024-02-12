@@ -54,7 +54,6 @@ ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
 void ATruck_Kun::BeginPlay()
 {
 	Super::BeginPlay();
-	timeStarted = true;
 
 	APlayerController* PC = Cast<APlayerController>(GetController());
 	if(PC) UWidgetBlueprintLibrary::SetInputMode_GameOnly(PC,false);
@@ -129,39 +128,45 @@ void ATruck_Kun::Tick(float DeltaTime)
 	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Orange,"Engine Pitch: " + FString::SanitizeFloat(EngineSFX->PitchMultiplier));
 
 	//Forward Driving
-	if(TimeHoldingForward > 0)
+	if(canDrive)
 	{
-		float FSpeed = ForwardSpeedCurve->GetFloatValue(TimeHoldingForward);
-		GetCharacterMovement()->MaxWalkSpeed = FSpeed * TruckBaseForwardSpeed;
-		if(Drifting)
+		if(TimeHoldingForward > 0)
 		{
-			if(TurnRot > 0)
+			float FSpeed = ForwardSpeedCurve->GetFloatValue(TimeHoldingForward);
+			GetCharacterMovement()->MaxWalkSpeed = FSpeed * TruckBaseForwardSpeed;
+			if(Drifting)
 			{
-				//Turning Right
-				AddMovementInput(GetActorForwardVector() + (GetActorRightVector()*0.15),FSpeed);
+				if(TurnRot > 0)
+				{
+					//Turning Right
+					AddMovementInput(GetActorForwardVector() + (GetActorRightVector()*0.15),FSpeed);
+				}
+				else if(TurnRot < 0)
+				{
+					//Turning Left
+					AddMovementInput(GetActorForwardVector() + -(GetActorRightVector()*0.15),FSpeed);
+				}
 			}
-			else if(TurnRot < 0)
+			else
 			{
-				//Turning Left
-				AddMovementInput(GetActorForwardVector() + -(GetActorRightVector()*0.15),FSpeed);
+				AddMovementInput(GetActorForwardVector(),FSpeed);
 			}
 		}
-		else
+		else if(TimeHoldingBackward > 0)
 		{
-			AddMovementInput(GetActorForwardVector(),FSpeed);
+			float BSpeed = BackwardSpeedCurve->GetFloatValue(TimeHoldingBackward);
+			GetCharacterMovement()->MaxWalkSpeed = BSpeed * TruckBaseBackwardSpeed;
+			AddMovementInput(GetActorForwardVector(),-BSpeed);
 		}
-	}
-	else if(TimeHoldingBackward > 0)
-	{
-		float BSpeed = BackwardSpeedCurve->GetFloatValue(TimeHoldingBackward);
-		GetCharacterMovement()->MaxWalkSpeed = BSpeed * TruckBaseBackwardSpeed;
-		AddMovementInput(GetActorForwardVector(),-BSpeed);
 	}
 
 	//VFX
 	//Drifting VFX
-	if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45)) onStartDrifting();
-	else onEndDrifting();
+	if(canDrive)
+	{
+		if(Drifting && TimeHoldingForward > (MaxHoldingTime*0.45)) onStartDrifting();
+		else onEndDrifting();
+	}
 
 	//Camera Realignment
 	if(CameraReOrienting)
@@ -340,4 +345,10 @@ AActor* ATruck_Kun::getNextCheckpoint()
 		}
 	}
 	return nullptr;
+}
+
+void ATruck_Kun::startDriving()
+{
+	timeStarted = true;
+	canDrive = true;
 }

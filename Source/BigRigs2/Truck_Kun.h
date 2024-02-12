@@ -21,6 +21,7 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 	
 	float timer = 0;
 	bool timeStarted = false;
+	bool canDrive = false;
 
 	float ResetTime = 0;
 	float MaxResetTime = 0.6;
@@ -113,6 +114,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	AActor* getNextCheckpoint();
+
+	UFUNCTION(BlueprintCallable)
+	void startDriving();
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
