@@ -70,6 +70,17 @@ void ATruck_Kun::UnReOrientCamera()
 	CameraReOrienting = false;
 }
 
+void ATruck_Kun::ResetActivate()
+{
+	ResetTime = 0;
+	isReseting = true;
+}
+
+void ATruck_Kun::DeActivateReset()
+{
+	isReseting = false;
+}
+
 // Called every frame
 void ATruck_Kun::Tick(float DeltaTime)
 {
@@ -168,6 +179,18 @@ void ATruck_Kun::Tick(float DeltaTime)
 		FrontCamera->GetRelativeRotation().Yaw, 0));
 
 	BackCamera->SetWorldRotation(FRotator(0,GetActorRotation().Yaw,0));
+
+
+	if(isReseting)
+	{
+		ResetTime += DeltaTime;
+		GEngine->AddOnScreenDebugMessage(-1,0,FColor::Red,FString::SanitizeFloat(FMath::RoundToInt((ResetTime/MaxResetTime)*100)) + "%");
+		if(ResetTime >= MaxResetTime)
+		{
+			//Reset Game
+			UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -184,6 +207,9 @@ void ATruck_Kun::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 	PlayerInputComponent->BindAction("ReOrientCamera",IE_Pressed,this,&ATruck_Kun::ReOrientCamera);
 	PlayerInputComponent->BindAction("ReOrientCamera",IE_Released,this,&ATruck_Kun::UnReOrientCamera);
+
+	PlayerInputComponent->BindAction("Reset",IE_Pressed,this,&ATruck_Kun::ResetActivate);
+	PlayerInputComponent->BindAction("Reset",IE_Released,this,&ATruck_Kun::DeActivateReset);
 
 	PlayerInputComponent->BindAction("ChangeCamera",IE_Released,this,&ATruck_Kun::ToggleCamera);
 

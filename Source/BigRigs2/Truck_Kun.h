@@ -22,9 +22,17 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 	float timer = 0;
 	bool timeStarted = false;
 
+	float ResetTime = 0;
+	float MaxResetTime = 0.6;
+
+	bool isReseting;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	int getCheckpoint(){ return CheckpointNumber; }
+
+	UFUNCTION(BlueprintCallable)
+	float getResetPercentage(){ return ResetTime/MaxResetTime; }
 
 	UFUNCTION(BlueprintCallable)
 	FString getTime(){
@@ -93,6 +101,9 @@ protected:
 
 	void ReOrientCamera();
 	void UnReOrientCamera();
+
+	void ResetActivate();
+	void DeActivateReset();
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
