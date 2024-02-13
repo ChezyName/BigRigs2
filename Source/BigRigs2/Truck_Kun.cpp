@@ -4,6 +4,7 @@
 
 #include "Truck_Kun.h"
 #include "Checkpoint.h"
+#include "TruckGameInstance.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "NinjaCharacter/Public/NinjaCharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -11,6 +12,7 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
@@ -48,6 +50,17 @@ ATruck_Kun::ATruck_Kun(const FObjectInitializer& ObjectInitializer)
 	EngineSFX->SetupAttachment(GetCapsuleComponent());
 
 	GetMesh()->SetMassScale(NAME_None,999.f);
+	
+	SetReplicates(true);
+}
+
+void ATruck_Kun::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	DOREPLIFETIME(ATruck_Kun,CheckpointNumber);
+	
+	DOREPLIFETIME(ATruck_Kun,TimeHoldingForward);
+	DOREPLIFETIME(ATruck_Kun,TimeHoldingBackward);
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
 // Called when the game starts or when spawned
@@ -124,7 +137,7 @@ void ATruck_Kun::Tick(float DeltaTime)
 	TimeHoldingBackward = FMath::Clamp(TimeHoldingBackward,0,MaxHoldingTime);
 
 	//Engine Sounds
-	EngineSFX->SetPitchMultiplier((((TimeHoldingForward/MaxHoldingTime)*1) - ((TimeHoldingBackward/MaxHoldingTime)*0.25)) + 1);
+	EngineSFX->SetPitchMultiplier((((TimeHoldingForward/MaxHoldingTime)*1) + ((TimeHoldingBackward/MaxHoldingTime)*0.5))/2);
 	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Orange,"Engine Pitch: " + FString::SanitizeFloat(EngineSFX->PitchMultiplier));
 
 	//Forward Driving
@@ -304,6 +317,13 @@ void ATruck_Kun::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 			{
 				//End Map
 				timeStarted = false;
+
+				//Set Time
+				UTruckGameInstance* GI = Cast<UTruckGameInstance>(GetGameInstance());
+				if(GI)
+				{
+					GI->setBestTime(timer);
+				}
 			}
 		}
 		else

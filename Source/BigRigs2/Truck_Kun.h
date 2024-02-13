@@ -17,6 +17,7 @@ class BIGRIGS2_API ATruck_Kun : public ACharacter
 	float TurnRot = 0;
 	float ForwardSpeed = 0;
 
+	UPROPERTY(Replicated)
 	int CheckpointNumber = 0;
 	
 	float timer = 0;
@@ -49,8 +50,13 @@ public:
 	// Sets default values for this character's properties
 	ATruck_Kun(const FObjectInitializer& ObjectInitializer);
 
+	UPROPERTY(Replicated)
 	float TimeHoldingForward;
+
+	UPROPERTY(Replicated)
 	float TimeHoldingBackward;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	bool HoldingForward = false;
 	bool HoldingBackward = false;
