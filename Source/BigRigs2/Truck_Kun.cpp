@@ -137,7 +137,8 @@ void ATruck_Kun::Tick(float DeltaTime)
 	TimeHoldingBackward = FMath::Clamp(TimeHoldingBackward,0,MaxHoldingTime);
 
 	//Engine Sounds
-	EngineSFX->SetPitchMultiplier((((TimeHoldingForward/MaxHoldingTime)*1) + ((TimeHoldingBackward/MaxHoldingTime)*0.5))/2);
+	float EnginePitchM = (((TimeHoldingForward/MaxHoldingTime)*1) - ((TimeHoldingBackward/MaxHoldingTime)*0.25)) + 1;
+	EngineSFX->SetPitchMultiplier(FMath::Abs(EnginePitchM));
 	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Orange,"Engine Pitch: " + FString::SanitizeFloat(EngineSFX->PitchMultiplier));
 
 	//Forward Driving

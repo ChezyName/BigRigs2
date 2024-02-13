@@ -30,7 +30,8 @@ struct FMapTime
 
 	UPROPERTY(EditAnywhere)
 	FString MapName;
-	
+
+	UPROPERTY(BlueprintReadOnly)
 	float Time = 0;
 };
 

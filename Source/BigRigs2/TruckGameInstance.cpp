@@ -19,8 +19,14 @@ void UTruckGameInstance::setBestTime(float Time)
 	Map.Time = Time;
 	//Set This Map's File as Best Time if currentTime < Map.BestTime
 	FString FileName = DataPath + "/" + Map.MapName + ".json";
-	FJsonObjectConverter::UStructToJsonObjectString(Map, FileName);
-	UE_LOG( LogTemp, Warning, TEXT("Saved File: %s"), *FileName);
+	FString JSONContents;
+	FJsonObjectConverter::UStructToJsonObjectString(Map, JSONContents);
+
+	//Save To File
+	if(FFileHelper::SaveStringToFile(JSONContents,*FileName,FFileHelper::EEncodingOptions::ForceUTF8))
+	{
+		UE_LOG( LogTemp, Warning, TEXT("Saved File: %s"), *FileName);
+	}
 }
 
 void UTruckGameInstance::getBestTimes()
@@ -30,12 +36,19 @@ void UTruckGameInstance::getBestTimes()
 	{
 		FString FileName = DataPath + "/" + Maps[i].MapName + ".json";
 		FMapTime LoadedMapTime;
-		if(!FJsonObjectConverter::JsonObjectStringToUStruct(FileName, &LoadedMapTime, 0, 0))
+		if(FPlatformFileManager::Get().GetPlatformFile().FileExists(*FileName))
 		{
-			// ERROR!
-			UE_LOG(LogTemp, Warning, TEXT("Error Loading File: %s"), *FileName);
-		}
+			FString FileContents;
+			if(FFileHelper::LoadFileToString(FileContents,*FileName))
+			{
+				if(FJsonObjectConverter::JsonObjectStringToUStruct(FileContents, &LoadedMapTime, 0, 0))
+				{
+					// ERROR!
+					UE_LOG(LogTemp, Warning, TEXT("Loaded File: %s"), *FileName);
+				}
 
-		Maps[i] = LoadedMapTime;
+				Maps[i] = LoadedMapTime;
+			}
+		}
 	}
 }
