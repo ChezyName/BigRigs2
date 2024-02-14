@@ -16,6 +16,7 @@ void UTruckGameInstance::setBestTime(float Time)
 {
 	if(currentMap < 0) return;
 	FMapTime Map = Maps[currentMap];
+	if(Map.Time != 0 && Map.Time < Time) return;
 	Map.Time = Time;
 	//Set This Map's File as Best Time if currentTime < Map.BestTime
 	FString FileName = DataPath + "/" + Map.MapName + ".json";

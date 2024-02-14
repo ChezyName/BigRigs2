@@ -62,9 +62,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void getBestTimes();
-
-	/*
-	UPROPERTY(BlueprintCallable)
+	
+	UFUNCTION(BlueprintCallable)
 	FString msToTime(float Time){
 		// Calculate minutes, seconds, and milliseconds
 		int32 Minutes = Time / 60000;
@@ -74,5 +73,4 @@ public:
 		// Format the string
 		return FString::Printf(TEXT("%02d:%02d:%03d"), Minutes, Seconds, Millis);
 	}
-	*/
 };
