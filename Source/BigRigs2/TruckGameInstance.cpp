@@ -4,6 +4,7 @@
 #include "TruckGameInstance.h"
 #include "JsonObjectConverter.h"
 
+//Main Menu Left
 void UTruckGameInstance::Init()
 {
 	DataPath = UKismetSystemLibrary::GetProjectDirectory();
